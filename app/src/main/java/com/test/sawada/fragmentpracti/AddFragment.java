@@ -4,15 +4,14 @@ import android.content.Context;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
-import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
-
 import java.util.Random;
+
+import androidx.fragment.app.Fragment;
 
 
 /**
@@ -38,15 +37,10 @@ public class AddFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
-    final private int[] colorCodeAsset = {Color.BLACK, Color.BLUE, Color.RED, Color.GREEN, Color.GRAY, Color.YELLOW, Color.CYAN, Color.MAGENTA, Color.WHITE, Color.LTGRAY};
-
     public AddFragment() {
         // Required empty public constructor
     }
 
-    void setTextView(String test) {
-
-    }
 
     /**
      * Use this factory method to create a new instance of
@@ -60,7 +54,6 @@ public class AddFragment extends Fragment {
         AddFragment fragment = new AddFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
-        mParam1 = param1;
         fragment.setArguments(args);
         return fragment;
     }
@@ -69,7 +62,6 @@ public class AddFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            setTextView(mParam1);
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
@@ -78,15 +70,9 @@ public class AddFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
-        Random random = new Random();
-        int randomNumber = random.nextInt(10);
-        container.setBackgroundColor(colorCodeAsset[randomNumber]);
         rootView = inflater.inflate(R.layout.fragment_add, container, false);
-        textView= (TextView)rootView.findViewById(R.id.textView);
-        textView.setText(mParam1);
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_add, container, false);
+        return rootView;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
