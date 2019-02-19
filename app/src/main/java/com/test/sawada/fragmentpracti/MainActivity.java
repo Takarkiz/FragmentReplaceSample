@@ -42,18 +42,24 @@ public class MainActivity extends AppCompatActivity implements AddFragment.OnFra
 
     }
 
-    public void delete(View view) {
-        fragmentManager.popBackStack("fragmentA", FragmentManager.POP_BACK_STACK_INCLUSIVE);
-    }
-
     public void createNewFragment(String url) {
         //トランザクションの開始
         transaction = fragmentManager.beginTransaction();
         //トランザクションにfragmentを追加
         transaction.replace(R.id.container, AddFragment.newInstance(url));
         // バックスタックに追加
-        transaction.addToBackStack("fragmentA");
+        transaction.addToBackStack(null);
         //出力
         transaction.commit();
+    }
+
+    @Override
+    public void onBackPressed() {
+        //バックスタックに保存されていれば戻る
+        if (fragmentManager.getBackStackEntryCount() > 0) {
+            fragmentManager.popBackStack();
+            return;
+        }
+        super.onBackPressed();
     }
 }
