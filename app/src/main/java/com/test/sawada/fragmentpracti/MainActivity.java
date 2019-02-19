@@ -13,8 +13,6 @@ public class MainActivity extends AppCompatActivity implements AddFragment.OnFra
     FragmentManager fragmentManager = getSupportFragmentManager();
     FragmentTransaction transaction;
 
-    private int count = 0;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,7 +30,6 @@ public class MainActivity extends AppCompatActivity implements AddFragment.OnFra
     @Override
     protected void onResume() {
         super.onResume();
-
     }
 
     @Override
@@ -45,13 +42,8 @@ public class MainActivity extends AppCompatActivity implements AddFragment.OnFra
 
     }
 
-//    public void add(View view) {
-//        createNewFragment();
-//    }
-
     public void delete(View view) {
-
-        fragmentManager.popBackStack();
+        fragmentManager.popBackStack("fragmentA", FragmentManager.POP_BACK_STACK_INCLUSIVE);
     }
 
     public void createNewFragment(String url) {
@@ -60,7 +52,7 @@ public class MainActivity extends AppCompatActivity implements AddFragment.OnFra
         //トランザクションにfragmentを追加
         transaction.replace(R.id.container, AddFragment.newInstance(url));
         // バックスタックに追加
-        transaction.addToBackStack(null);
+        transaction.addToBackStack("fragmentA");
         //出力
         transaction.commit();
     }
