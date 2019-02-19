@@ -22,7 +22,7 @@ public class MainActivity extends AppCompatActivity implements AddFragment.OnFra
         //トランザクションの開始
         transaction = fragmentManager.beginTransaction();
         //トランザクションにfragmentを追加
-        transaction.add(R.id.container, AddFragment.newInstance("最初の画面"));
+        transaction.add(R.id.container, AddFragment.newInstance("https://www.google.com/"));
         // バックスタックに追加
         transaction.addToBackStack(null);
         //出力
@@ -45,19 +45,23 @@ public class MainActivity extends AppCompatActivity implements AddFragment.OnFra
 
     }
 
-    public void add(View view) {
-        //トランザクションの開始
-        transaction = fragmentManager.beginTransaction();
-        //トランザクションにfragmentを追加
-        transaction.replace(R.id.container, AddFragment.newInstance("次の画面"));
-        // バックスタックに追加
-        transaction.addToBackStack(null);
-        //出力
-        transaction.commit();
-    }
+//    public void add(View view) {
+//        createNewFragment();
+//    }
 
     public void delete(View view) {
 
         fragmentManager.popBackStack();
+    }
+
+    public void createNewFragment(String url) {
+        //トランザクションの開始
+        transaction = fragmentManager.beginTransaction();
+        //トランザクションにfragmentを追加
+        transaction.replace(R.id.container, AddFragment.newInstance(url));
+        // バックスタックに追加
+        transaction.addToBackStack(null);
+        //出力
+        transaction.commit();
     }
 }

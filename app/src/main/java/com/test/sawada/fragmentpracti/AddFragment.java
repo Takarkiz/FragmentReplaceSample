@@ -1,12 +1,14 @@
 package com.test.sawada.fragmentpracti;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.TextView;
@@ -31,10 +33,9 @@ public class AddFragment extends Fragment {
     private static final String ARG_PARAM2 = "param2";
 
     // TODO: Rename and change types of parameters
-    static String mParam1;
+    private String mParam1;
     private String mParam2;
-    TextView textView;
-
+    String shouldLoadUrl;
     View rootView;
 
     private OnFragmentInteractionListener mListener;
@@ -66,6 +67,7 @@ public class AddFragment extends Fragment {
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
+            shouldLoadUrl = mParam1;
         }
     }
 
@@ -76,8 +78,8 @@ public class AddFragment extends Fragment {
         // Inflate the layout for this fragment
 
         WebView webView = (WebView)rootView.findViewById(R.id.webView);
-        webView.setWebViewClient(new WebViewClient());
-        webView.loadUrl("https://www.google.com/");
+        webView.setWebViewClient(MyWebViewClient());
+        webView.loadUrl(shouldLoadUrl);
         return rootView;
     }
 
@@ -119,4 +121,32 @@ public class AddFragment extends Fragment {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
+
+    private WebViewClient MyWebViewClient() {
+        return new WebViewClient() {
+
+            @Override
+            public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
+                String url = request.getUrl().toString();
+
+                MainActivity mainActivity = (MainActivity)getActivity();
+                if(mainActivity != null) {
+                    mainActivity.createNewFragment(url);
+                }
+
+                return true;
+            }
+
+            @Override
+            public void onPageStarted(WebView view, String url, Bitmap favicon) {
+            }
+
+            @Override
+            public void onPageFinished(WebView view, String url) {
+
+            }
+        };
+    }
+
+
 }
