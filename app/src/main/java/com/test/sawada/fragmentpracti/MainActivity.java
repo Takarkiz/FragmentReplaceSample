@@ -20,6 +20,7 @@ public class MainActivity extends AppCompatActivity implements AddFragment.OnFra
     BottomNavigationView bottomNavigationView;
     final String[] category = {"home", "dashboard", "notification"};
     int index = 0;
+    int backStacks = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +77,7 @@ public class MainActivity extends AppCompatActivity implements AddFragment.OnFra
             @Override
             public void onNavigationItemReselected(@NonNull MenuItem menuItem) {
                 AddFragment addFragment;
+                fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
                 switch (menuItem.getItemId()) {
                     case R.id.navigation_home:
                         addFragment = AddFragment.newInstance("https://www.google.com/");
@@ -92,7 +94,6 @@ public class MainActivity extends AppCompatActivity implements AddFragment.OnFra
                     default:
                         break;
                 }
-                fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
             }
         });
 
@@ -100,7 +101,8 @@ public class MainActivity extends AppCompatActivity implements AddFragment.OnFra
             @Override
             public void onBackStackChanged() {
                 int backStackCount = fragmentManager.getBackStackEntryCount();
-                textView.setText("バックスタック数:"+String.valueOf(backStackCount));
+                backStacks = backStackCount;
+                textView.setText("バックスタック数:" + String.valueOf(backStackCount));
             }
         });
     }
@@ -119,8 +121,6 @@ public class MainActivity extends AppCompatActivity implements AddFragment.OnFra
         transaction = fragmentManager.beginTransaction();
         //トランザクションにfragmentを追加
         transaction.add(R.id.container, AddFragment.newInstance("https://www.google.com/"), "home");
-        // バックスタックに追加
-        transaction.addToBackStack(null);
         //出力
         transaction.commit();
     }
@@ -144,7 +144,7 @@ public class MainActivity extends AppCompatActivity implements AddFragment.OnFra
         //トランザクションの開始
         transaction = fragmentManager.beginTransaction();
         //トランザクションにfragmentを追加
-        transaction.replace(R.id.container, AddFragment.newInstance(url), category[index]);
+        transaction.replace(R.id.container, AddFragment.newInstance(url));
         // バックスタックに追加
         transaction.addToBackStack(null);
         //出力
@@ -154,10 +154,14 @@ public class MainActivity extends AppCompatActivity implements AddFragment.OnFra
     @Override
     public void onBackPressed() {
         //バックスタックに保存されていれば戻る
-        if (fragmentManager.getBackStackEntryCount() > 1) {
+        if (fragmentManager.getBackStackEntryCount() > 0) {
             //手前に積まれているBackStackのtag名を取得
-            String tag = fragmentManager.getBackStackEntryAt(1).getName();
-            Log.d("TAG:一つ前のタグ", tag);
+            String tag = fragmentManager.getBackStackEntryAt(backStacks-1).getName();
+            if (tag != null) {
+                Log.d("TAG:一つ前のタグ", "🔥" + tag + "🔥");
+            } else {
+                Log.d("TAG:DebugLog", "tagはnullのようじゃの👴");
+            }
 //            if (tag != null) {
 //                switch (tag) {
 //                    case "home":
@@ -176,6 +180,6 @@ public class MainActivity extends AppCompatActivity implements AddFragment.OnFra
             fragmentManager.popBackStack();
             return;
         }
-        //super.onBackPressed();
+        super.onBackPressed();
     }
 }

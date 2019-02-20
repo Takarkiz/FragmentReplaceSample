@@ -10,19 +10,19 @@
         android:id="@+id/backStackCountText"
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:text="バックスタック数: "
-        android:textSize="24sp"
         android:background="@android:color/holo_green_light"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        android:gravity="center"
+        android:text="バックスタック数: 0"
+        android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
-        android:gravity="center"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 
     <FrameLayout
         android:id="@+id/container"
         android:layout_width="match_parent"
-        android:layout_height="639dp"
+        android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@id/navigation"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
