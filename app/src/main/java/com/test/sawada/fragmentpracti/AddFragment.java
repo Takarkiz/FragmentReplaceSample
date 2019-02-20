@@ -131,7 +131,7 @@ public class AddFragment extends Fragment {
 
                 MainActivity mainActivity = (MainActivity)getActivity();
                 if(mainActivity != null) {
-                    mainActivity.createNewFragment(url);
+                    mainActivity.addNewFragment(url);
                 }
 
                 return true;
