@@ -38,6 +38,8 @@ public class AddFragment extends Fragment {
     String shouldLoadUrl;
     View rootView;
 
+    WebView webView;
+
     private OnFragmentInteractionListener mListener;
 
     public AddFragment() {
@@ -74,12 +76,15 @@ public class AddFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.fragment_add, container, false);
-        // Inflate the layout for this fragment
 
-        WebView webView = (WebView)rootView.findViewById(R.id.webView);
-        webView.setWebViewClient(MyWebViewClient());
-        webView.loadUrl(shouldLoadUrl);
+        if(rootView == null) {
+            rootView = inflater.inflate(R.layout.fragment_add, container, false);
+            // Inflate the layout for this fragment
+
+            webView = (WebView) rootView.findViewById(R.id.webView);
+            webView.setWebViewClient(MyWebViewClient());
+            webView.loadUrl(shouldLoadUrl);
+        }
         return rootView;
     }
 

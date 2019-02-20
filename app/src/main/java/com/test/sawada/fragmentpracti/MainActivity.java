@@ -2,7 +2,9 @@ package com.test.sawada.fragmentpracti;
 
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -24,6 +26,7 @@ public class MainActivity extends AppCompatActivity implements AddFragment.OnFra
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setInitialFragment();
+        final TextView textView = findViewById(R.id.backStackCountText);
         bottomNavigationView = (BottomNavigationView) findViewById(R.id.navigation);
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -73,7 +76,6 @@ public class MainActivity extends AppCompatActivity implements AddFragment.OnFra
             @Override
             public void onNavigationItemReselected(@NonNull MenuItem menuItem) {
                 AddFragment addFragment;
-                fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
                 switch (menuItem.getItemId()) {
                     case R.id.navigation_home:
                         addFragment = AddFragment.newInstance("https://www.google.com/");
@@ -90,6 +92,15 @@ public class MainActivity extends AppCompatActivity implements AddFragment.OnFra
                     default:
                         break;
                 }
+                fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+            }
+        });
+
+        fragmentManager.addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
+            @Override
+            public void onBackStackChanged() {
+                int backStackCount = fragmentManager.getBackStackEntryCount();
+                textView.setText("バックスタック数:"+String.valueOf(backStackCount));
             }
         });
     }
@@ -98,7 +109,7 @@ public class MainActivity extends AppCompatActivity implements AddFragment.OnFra
         if (fragment != null) {
             FragmentTransaction transaction = fragmentManager.beginTransaction();
             transaction.replace(R.id.container, fragment, tag);
-            transaction.addToBackStack(null);
+            transaction.addToBackStack(tag);
             transaction.commit();
         }
     }
@@ -138,17 +149,33 @@ public class MainActivity extends AppCompatActivity implements AddFragment.OnFra
         transaction.addToBackStack(null);
         //出力
         transaction.commit();
-
-        fragmentManager.executePendingTransactions();
     }
 
     @Override
     public void onBackPressed() {
         //バックスタックに保存されていれば戻る
-        if (fragmentManager.getBackStackEntryCount() > 0) {
+        if (fragmentManager.getBackStackEntryCount() > 1) {
+            //手前に積まれているBackStackのtag名を取得
+            String tag = fragmentManager.getBackStackEntryAt(1).getName();
+            Log.d("TAG:一つ前のタグ", tag);
+//            if (tag != null) {
+//                switch (tag) {
+//                    case "home":
+//                        bottomNavigationView.setSelectedItemId(R.id.navigation_home);
+//                        break;
+//                    case "dashboard":
+//                        bottomNavigationView.setSelectedItemId(R.id.navigation_dashboard);
+//                        break;
+//                    case "notification":
+//                        bottomNavigationView.setSelectedItemId(R.id.navigation_notifications);
+//                        break;
+//                    default:
+//                        break;
+//                }
+//            }
             fragmentManager.popBackStack();
             return;
         }
-        super.onBackPressed();
+        //super.onBackPressed();
     }
 }
