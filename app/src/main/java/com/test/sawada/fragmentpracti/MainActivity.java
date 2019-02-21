@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity implements AddFragment.OnFra
                             addFragment = (AddFragment) fragmentManager.findFragmentByTag("home");
 
                         } else {
-                            addFragment = AddFragment.newInstance("https://www.google.com/");
+                            addFragment = AddFragment.newInstance("https://wikiwiki.jp/dqdic3rd/%E3%80%90%E3%83%A2%E3%83%B3%E3%82%B9%E3%82%BF%E3%83%BC%E3%81%9A%E3%81%8B%E3%82%93%E3%80%91");
                         }
                         setFragment(addFragment, category[index]);
                         index = 0;
@@ -80,7 +80,7 @@ public class MainActivity extends AppCompatActivity implements AddFragment.OnFra
                 fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
                 switch (menuItem.getItemId()) {
                     case R.id.navigation_home:
-                        addFragment = AddFragment.newInstance("https://www.google.com/");
+                        addFragment = AddFragment.newInstance("https://wikiwiki.jp/dqdic3rd/%E3%80%90%E3%83%A2%E3%83%B3%E3%82%B9%E3%82%BF%E3%83%BC%E3%81%9A%E3%81%8B%E3%82%93%E3%80%91");
                         setFragment(addFragment, category[0]);
                         break;
                     case R.id.navigation_dashboard:
@@ -111,6 +111,7 @@ public class MainActivity extends AppCompatActivity implements AddFragment.OnFra
         if (fragment != null) {
             FragmentTransaction transaction = fragmentManager.beginTransaction();
             transaction.replace(R.id.container, fragment);
+            Log.d("TAG:新しいTag", "🕺" + tag + "🕺");
             transaction.addToBackStack(tag);
             transaction.commit();
         }
@@ -120,8 +121,8 @@ public class MainActivity extends AppCompatActivity implements AddFragment.OnFra
         //トランザクションの開始
         transaction = fragmentManager.beginTransaction();
         //トランザクションにfragmentを追加
-        transaction.add(R.id.container, AddFragment.newInstance("https://www.google.com/"), "home");
-
+        transaction.add(R.id.container, AddFragment.newInstance("https://wikiwiki.jp/dqdic3rd/%E3%80%90%E3%83%A2%E3%83%B3%E3%82%B9%E3%82%BF%E3%83%BC%E3%81%9A%E3%81%8B%E3%82%93%E3%80%91"));
+        Log.d("TAG:新しいTag", "🕺" + "home" + "🕺");
         transaction.addToBackStack("home");
         //出力
         transaction.commit();
@@ -156,38 +157,29 @@ public class MainActivity extends AppCompatActivity implements AddFragment.OnFra
     @Override
     public void onBackPressed() {
         //バックスタックに保存されていれば戻る
-        switch (fragmentManager.getBackStackEntryCount()) {
-            case 0:
-                //バックスタックがない場合は通常の動作
-                super.onBackPressed();
-                break;
-            case 1:
-                //この時にはブラウザの上部に行くようにする
+        if (fragmentManager.getBackStackEntryCount() > 1) {
 
-                break;
-            default:
-                //手前に積まれているBackStackのtag名を取得
-                String tag = fragmentManager.getBackStackEntryAt(backStacks - 1).getName();
-                fragmentManager.popBackStack();
-                if (tag != null) {
-                    Log.d("TAG:一つ前のタグ", "🔥" + tag + "🔥");
-                    switch (tag) {
-                        case "home":
-                            bottomNavigationView.getMenu().findItem(R.id.navigation_home).setChecked(true);
-                            break;
-                        case "dashboard":
-                            bottomNavigationView.getMenu().findItem(R.id.navigation_dashboard).setChecked(true);
-                            break;
-                        case "notification":
-                            bottomNavigationView.getMenu().findItem(R.id.navigation_notifications).setChecked(true);
-                            break;
-                        default:
-                            break;
-                    }
-                } else {
-                    Log.d("TAG:DebugLog", "👴" + "tagはnullのようじゃ👴");
+            //手前に積まれているBackStackのtag名を取得
+            String tag = fragmentManager.getBackStackEntryAt(backStacks - 1).getName();
+            fragmentManager.popBackStack();
+            if (tag != null) {
+                Log.d("TAG:一つ前のタグ", "🔥" + tag + "🔥");
+                switch (tag) {
+                    case "home":
+                        bottomNavigationView.getMenu().findItem(R.id.navigation_home).setChecked(true);
+                        break;
+                    case "dashboard":
+                        bottomNavigationView.getMenu().findItem(R.id.navigation_dashboard).setChecked(true);
+                        break;
+                    case "notification":
+                        bottomNavigationView.getMenu().findItem(R.id.navigation_notifications).setChecked(true);
+                        break;
+                    default:
+                        break;
                 }
-                return;
+            } else {
+                Log.d("TAG:一つ前のタグ", "👴" + "tagはnullのようじゃ👴");
+            }
         }
     }
 }
