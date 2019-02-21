@@ -37,7 +37,6 @@ public class MainActivity extends AppCompatActivity implements AddFragment.OnFra
 
                 switch (menuItem.getItemId()) {
                     case R.id.navigation_home:
-                        index = 0;
                         //すでにホームタグのついたフラグメントが存在する場合
                         if (fragmentManager.findFragmentByTag("home") != null) {
                             addFragment = (AddFragment) fragmentManager.findFragmentByTag("home");
@@ -45,25 +44,26 @@ public class MainActivity extends AppCompatActivity implements AddFragment.OnFra
                         } else {
                             addFragment = AddFragment.newInstance("https://www.google.com/");
                         }
-                        setFragment(addFragment, "home");
+                        setFragment(addFragment, category[index]);
+                        index = 0;
                         break;
                     case R.id.navigation_dashboard:
-                        index = 1;
                         if (fragmentManager.findFragmentByTag("dashboard") != null) {
                             addFragment = (AddFragment) fragmentManager.findFragmentByTag("dashboard");
                         } else {
-                            addFragment = AddFragment.newInstance("https://qiita.com/iKimishima/items/d44bb9cc2a1d04548fdd");
+                            addFragment = AddFragment.newInstance("https://www.nintendo.co.jp/hardware/switch/");
                         }
-                        setFragment(addFragment, "dashboard");
+                        setFragment(addFragment, category[index]);
+                        index = 1;
                         break;
                     case R.id.navigation_notifications:
-                        index = 2;
                         if (fragmentManager.findFragmentByTag("notification") != null) {
                             addFragment = (AddFragment) fragmentManager.findFragmentByTag("notification");
                         } else {
-                            addFragment = AddFragment.newInstance("https://material.io/develop/android/components/bottom-navigation-view/");
+                            addFragment = AddFragment.newInstance("https://stmn.co.jp/");
                         }
-                        setFragment(addFragment, "notification");
+                        setFragment(addFragment, category[index]);
+                        index = 2;
                         break;
 
                     default:
@@ -84,11 +84,11 @@ public class MainActivity extends AppCompatActivity implements AddFragment.OnFra
                         setFragment(addFragment, category[0]);
                         break;
                     case R.id.navigation_dashboard:
-                        addFragment = AddFragment.newInstance("https://qiita.com/iKimishima/items/d44bb9cc2a1d04548fdd");
+                        addFragment = AddFragment.newInstance("https://www.nintendo.co.jp/hardware/switch/");
                         setFragment(addFragment, category[1]);
                         break;
                     case R.id.navigation_notifications:
-                        addFragment = AddFragment.newInstance("https://material.io/develop/android/components/bottom-navigation-view/");
+                        addFragment = AddFragment.newInstance("https://stmn.co.jp/");
                         setFragment(addFragment, category[2]);
                         break;
                     default:
@@ -110,7 +110,7 @@ public class MainActivity extends AppCompatActivity implements AddFragment.OnFra
     private void setFragment(AddFragment fragment, String tag) {
         if (fragment != null) {
             FragmentTransaction transaction = fragmentManager.beginTransaction();
-            transaction.replace(R.id.container, fragment, tag);
+            transaction.replace(R.id.container, fragment);
             transaction.addToBackStack(tag);
             transaction.commit();
         }
@@ -121,6 +121,8 @@ public class MainActivity extends AppCompatActivity implements AddFragment.OnFra
         transaction = fragmentManager.beginTransaction();
         //トランザクションにfragmentを追加
         transaction.add(R.id.container, AddFragment.newInstance("https://www.google.com/"), "home");
+
+        transaction.addToBackStack("home");
         //出力
         transaction.commit();
     }
@@ -157,27 +159,25 @@ public class MainActivity extends AppCompatActivity implements AddFragment.OnFra
         if (fragmentManager.getBackStackEntryCount() > 0) {
             //手前に積まれているBackStackのtag名を取得
             String tag = fragmentManager.getBackStackEntryAt(backStacks-1).getName();
+            fragmentManager.popBackStack();
             if (tag != null) {
                 Log.d("TAG:一つ前のタグ", "🔥" + tag + "🔥");
+                switch (tag) {
+                    case "home":
+                        bottomNavigationView.setSelectedItemId(R.id.navigation_home);
+                        break;
+                    case "dashboard":
+                        bottomNavigationView.setSelectedItemId(R.id.navigation_dashboard);
+                        break;
+                    case "notification":
+                        bottomNavigationView.setSelectedItemId(R.id.navigation_notifications);
+                        break;
+                    default:
+                        break;
+                }
             } else {
                 Log.d("TAG:DebugLog", "tagはnullのようじゃの👴");
             }
-//            if (tag != null) {
-//                switch (tag) {
-//                    case "home":
-//                        bottomNavigationView.setSelectedItemId(R.id.navigation_home);
-//                        break;
-//                    case "dashboard":
-//                        bottomNavigationView.setSelectedItemId(R.id.navigation_dashboard);
-//                        break;
-//                    case "notification":
-//                        bottomNavigationView.setSelectedItemId(R.id.navigation_notifications);
-//                        break;
-//                    default:
-//                        break;
-//                }
-//            }
-            fragmentManager.popBackStack();
             return;
         }
         super.onBackPressed();
