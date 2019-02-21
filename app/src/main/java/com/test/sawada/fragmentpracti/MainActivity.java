@@ -156,30 +156,38 @@ public class MainActivity extends AppCompatActivity implements AddFragment.OnFra
     @Override
     public void onBackPressed() {
         //バックスタックに保存されていれば戻る
-        if (fragmentManager.getBackStackEntryCount() > 0) {
-            //手前に積まれているBackStackのtag名を取得
-            String tag = fragmentManager.getBackStackEntryAt(backStacks-1).getName();
-            fragmentManager.popBackStack();
-            if (tag != null) {
-                Log.d("TAG:一つ前のタグ", "🔥" + tag + "🔥");
-                switch (tag) {
-                    case "home":
-                        bottomNavigationView.setSelectedItemId(R.id.navigation_home);
-                        break;
-                    case "dashboard":
-                        bottomNavigationView.setSelectedItemId(R.id.navigation_dashboard);
-                        break;
-                    case "notification":
-                        bottomNavigationView.setSelectedItemId(R.id.navigation_notifications);
-                        break;
-                    default:
-                        break;
+        switch (fragmentManager.getBackStackEntryCount()) {
+            case 0:
+                //バックスタックがない場合は通常の動作
+                super.onBackPressed();
+                break;
+            case 1:
+                //この時にはブラウザの上部に行くようにする
+
+                break;
+            default:
+                //手前に積まれているBackStackのtag名を取得
+                String tag = fragmentManager.getBackStackEntryAt(backStacks - 1).getName();
+                fragmentManager.popBackStack();
+                if (tag != null) {
+                    Log.d("TAG:一つ前のタグ", "🔥" + tag + "🔥");
+                    switch (tag) {
+                        case "home":
+                            bottomNavigationView.getMenu().findItem(R.id.navigation_home).setChecked(true);
+                            break;
+                        case "dashboard":
+                            bottomNavigationView.getMenu().findItem(R.id.navigation_dashboard).setChecked(true);
+                            break;
+                        case "notification":
+                            bottomNavigationView.getMenu().findItem(R.id.navigation_notifications).setChecked(true);
+                            break;
+                        default:
+                            break;
+                    }
+                } else {
+                    Log.d("TAG:DebugLog", "👴" + "tagはnullのようじゃ👴");
                 }
-            } else {
-                Log.d("TAG:DebugLog", "tagはnullのようじゃの👴");
-            }
-            return;
+                return;
         }
-        super.onBackPressed();
     }
 }
